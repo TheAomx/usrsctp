@@ -28,6 +28,6 @@
 # SUCH DAMAGE.
 #
 
-SUBDIRS = usrsctplib programs
+SUBDIRS = usrsctplib
 EXTRA_DIST = bootstrap Makefile.nmake
 ACLOCAL_AMFLAGS = -I m4

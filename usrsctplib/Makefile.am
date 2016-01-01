@@ -31,7 +31,8 @@
 AUTOMAKE_OPTIONS       = subdir-objects
 EXTRA_DIST             = Makefile.nmake
 lib_LTLIBRARIES        = libusrsctp.la
-libusrsctp_la_SOURCES  = user_atomic.h \
+libusrsctp_la_SOURCES  = ifaddrs.c    \
+			 user_atomic.h \
                          user_environment.c user_environment.h \
                          user_inpcb.h \
                          user_ip_icmp.h \
