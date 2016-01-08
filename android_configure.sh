@@ -12,7 +12,7 @@ export CROSS_COMPILE=arm-linux-androideabi
 export ANDROID_PREFIX=${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
 
 # Apparently android-8 works fine, there are other versions, look them up
-export SYSROOT=${ANDROID_NDK}/platforms/android-19/arch-arm
+export SYSROOT=${ANDROID_NDK}/platforms/android-8/arch-arm
 
 export CROSS_PATH=${ANDROID_PREFIX}/bin/${CROSS_COMPILE}
 
