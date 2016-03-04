@@ -1,3 +1,6 @@
+* Important Note: This is an fork with an custom android-configure file.
+* It can be used to compile the usrsctp lib for Android Devices with the NDK
+
 # usrsctp
 
 This is a userland SCTP stack supporting FreeBSD, Linux, Mac OS X and Windows.
