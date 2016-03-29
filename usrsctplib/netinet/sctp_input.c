@@ -32,7 +32,7 @@
 
 #ifdef __FreeBSD__
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: head/sys/netinet/sctp_input.c 295772 2016-02-18 21:21:45Z tuexen $");
+__FBSDID("$FreeBSD: head/sys/netinet/sctp_input.c 297349 2016-03-28 11:32:20Z tuexen $");
 #endif
 
 #include <netinet/sctp_os.h>
@@ -2463,7 +2463,7 @@ sctp_process_cookie_new(struct mbuf *m, int iphlen, int offset,
 						  SCTP_RTT_FROM_NON_DATA);
 #if defined(INET) || defined(INET6)
 		if (((*netp)->port == 0) && (port != 0)) {
-			sctp_pathmtu_adjustment(stcb, (*netp)->mtu - sizeof(struct udphdr));
+			sctp_pathmtu_adjustment(stcb, (uint16_t)((*netp)->mtu - sizeof(struct udphdr)));
 		}
 		(*netp)->port = port;
 #endif
@@ -3498,7 +3498,7 @@ process_chunk_drop(struct sctp_tcb *stcb, struct sctp_chunk_desc *desc,
 				sctp_misc_ints(SCTP_FLIGHT_LOG_DOWN_PDRP,
 					       tp1->whoTo->flight_size,
 					       tp1->book_size,
-					       (uintptr_t)stcb,
+					       (uint32_t)(uintptr_t)stcb,
 					       tp1->rec.data.TSN_seq);
 			}
 			if (tp1->sent < SCTP_DATAGRAM_RESEND) {
@@ -5765,7 +5765,7 @@ sctp_process_control(struct mbuf *m, int iphlen, int *offset, int length,
 					len = min(SCTP_SIZE32(chk_length), (uint32_t)(length - *offset));
 					cause = mtod(op_err, struct sctp_gen_error_cause *);
 					cause->code =  htons(SCTP_CAUSE_UNRECOG_CHUNK);
-					cause->length = htons(len + sizeof(struct sctp_gen_error_cause));
+					cause->length = htons((uint16_t)(len + sizeof(struct sctp_gen_error_cause)));
 					SCTP_BUF_LEN(op_err) = sizeof(struct sctp_gen_error_cause);
 					SCTP_BUF_NEXT(op_err) = SCTP_M_COPYM(m, *offset, len, M_NOWAIT);
 					if (SCTP_BUF_NEXT(op_err) != NULL) {
@@ -6225,7 +6225,9 @@ trigger_send:
 	if (!TAILQ_EMPTY(&stcb->asoc.control_send_queue)) {
 		cnt_ctrl_ready = stcb->asoc.ctrl_queue_cnt - stcb->asoc.ecn_echo_cnt_onq;
 	}
-	if (cnt_ctrl_ready || stcb->asoc.trigger_reset ||
+	if (!TAILQ_EMPTY(&stcb->asoc.asconf_send_queue) ||
+	    cnt_ctrl_ready ||
+	    stcb->asoc.trigger_reset ||
 	    ((un_sent) &&
 	     (stcb->asoc.peers_rwnd > 0 ||
 	      (stcb->asoc.peers_rwnd <= 0 && stcb->asoc.total_flight == 0)))) {
